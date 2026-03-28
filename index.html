@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<h1>Reserve Your Experience</h1>
+<div class="subtitle">Ossobuco Wynwood</div>
+
+<div class="info">
+Elevated dining in the heart of Wynwood.<br><br>
+Reservations are currently hosted at our Wynwood location.
+</div>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,8 +21,8 @@
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background: #0d0d0d;
-  color: #fff;
+  background: #F6F2EB;
+  color: #1F3059;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,92 +30,73 @@ body {
 }
 
 .container {
-  background: #141414;
-  padding: 30px;
-  border-radius: 16px;
-  width: 360px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-  border: 1px solid rgba(197,157,95,0.2);
-}
-
-.hero img {
-  width: 100%;
+  background: #ffffff;
+  padding: 35px;
   border-radius: 10px;
-  margin-bottom: 15px;
-  opacity: 0.85;
+  width: 360px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
 }
 
 h1 {
   font-family: 'Playfair Display', serif;
   font-size: 26px;
   margin-bottom: 5px;
-  letter-spacing: 1px;
+  color: #1F3059;
 }
 
 .subtitle {
-  color: #c59d5f;
-  font-size: 12px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
+  color: #1F3059;
+  font-size: 13px;
+  margin-bottom: 15px;
+  opacity: 0.7;
 }
 
 .info {
-  color: #aaa;
-  font-size: 12px;
+  color: #1F3059;
+  font-size: 13px;
   margin-bottom: 20px;
-  line-height: 1.5;
+  line-height: 1.6;
+  opacity: 0.75;
 }
 
 input {
   width: 100%;
   padding: 12px;
   margin-bottom: 12px;
-  background: #1f1f1f;
-  border: 1px solid #333;
-  color: white;
-  border-radius: 8px;
-  font-size: 14px;
+  background: #F6F2EB;
+  border: 1px solid #e5e0d8;
+  color: #1F3059;
+  border-radius: 6px;
 }
 
 button {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #c59d5f, #e6c78b);
+  background: #F5D0C9;
+  color: #1F3059;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 14px;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
-  letter-spacing: 1px;
 }
 
 button:hover {
   opacity: 0.9;
 }
 
-.summary {
-  display: none;
-  text-align: center;
-}
-
 .summary-box {
-  background: #1c1c1c;
+  background: #F6F2EB;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-bottom: 20px;
-}
-
-.summary-box p {
-  margin: 6px 0;
-  color: #ddd;
 }
 
 .loading {
   display: none;
   text-align: center;
   font-size: 14px;
-  color: #aaa;
+  color: #1F3059;
+  opacity: 0.7;
 }
 </style>
 </head>
@@ -116,7 +106,7 @@ button:hover {
 <div class="container">
 
 <div class="hero">
-<img src="https://images.unsplash.com/photo-1551218808-94e220e084d2">
+<img src="hero.jpg" style="width:100%; border-radius:8px; margin-bottom:15px;">
 </div>
 
 <h1>Reserve Your Experience</h1>
