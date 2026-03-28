@@ -154,8 +154,8 @@ Checking availability...
 
 // CONFIG — adjust to your real schedule
 const businessHours = {
-  0: null, // Sunday (closed example → change if needed)
-  1: null, // Monday CLOSED
+  0: { open: "16:00", close: "22:00" }, // Sun
+  1: { open: "16:00", close: "22:00" }, // Mon
   2: { open: "16:00", close: "22:00" }, // Tuesday
   3: { open: "16:00", close: "22:00" }, // Wednesday
   4: { open: "16:00", close: "23:00" }, // Thursday
