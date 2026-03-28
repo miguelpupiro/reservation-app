@@ -142,20 +142,17 @@ function showSummary() {
   const date = document.getElementById("date").value;
   const time = document.getElementById("time").value;
   const party = document.getElementById("party").value;
-  const location = document.getElementById("location").value;
 
   if (!date || !time || !party) {
     alert("Please complete all fields");
     return;
   }
 
-  reservationData = { date, time, party, location };
+  reservationData = { date, time, party };
 
   document.getElementById("summaryDate").innerText = date;
   document.getElementById("summaryTime").innerText = time;
   document.getElementById("summaryParty").innerText = party + " Guests";
-  document.getElementById("summaryLocation").innerText =
-    location === "wynwood" ? "Wynwood" : "Coconut Grove";
 
   document.getElementById("formSection").style.display = "none";
   document.getElementById("summarySection").style.display = "block";
@@ -167,11 +164,27 @@ function goBack() {
 }
 
 function goToOpenTable() {
-  let url = reservationData.location === "wynwood"
-    ? "https://www.opentable.com/r/ossobuco-wynwood"
-    : "https://www.opentable.com/r/ossobuco-coconut-grove";
 
-  window.open(url, "_blank");
+  const sheetURL = "https://script.google.com/macros/s/AKfycbzqVcHr4S4JDwvpGx2TMuIyvhzvv2zDrmKrZLE29nHXQb2la-LF2lEhJRs2m3wPuYD3lQ/exec";
+
+  fetch(sheetURL, {
+    method: "POST",
+    body: JSON.stringify({
+      date: reservationData.date,
+      time: reservationData.time,
+      party: reservationData.party,
+      location: "Wynwood",
+      source: "google"
+    })
+  });
+
+  const partySize = parseInt(reservationData.party);
+
+  if (partySize > 6) {
+    window.open("https://ossobucoholdingllc.tripleseat.com/party_request/47505", "_blank");
+  } else {
+    window.open("https://www.opentable.com/r/ossobuco-wynwood", "_blank");
+  }
 }
 </script>
 
