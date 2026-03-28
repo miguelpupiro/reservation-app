@@ -2,14 +2,6 @@
 <html lang="en">
 <head>
 
-<h1>Reserve Your Experience</h1>
-<div class="subtitle">Ossobuco Wynwood</div>
-
-<div class="info">
-Elevated dining in the heart of Wynwood.<br><br>
-Reservations are currently hosted at our Wynwood location.
-</div>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -18,6 +10,7 @@ Reservations are currently hosted at our Wynwood location.
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -31,35 +24,41 @@ body {
 
 .container {
   background: #ffffff;
-  padding: 35px;
-  border-radius: 10px;
+  padding: 30px;
+  border-radius: 12px;
   width: 360px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.06);
 }
 
+/* HERO IMAGE */
+.hero img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+/* TYPOGRAPHY */
 h1 {
   font-family: 'Playfair Display', serif;
   font-size: 26px;
   margin-bottom: 5px;
-  color: #1F3059;
 }
 
 .subtitle {
-  color: #1F3059;
   font-size: 13px;
-  margin-bottom: 15px;
   opacity: 0.7;
+  margin-bottom: 10px;
 }
 
 .info {
-  color: #1F3059;
   font-size: 13px;
-  margin-bottom: 20px;
   line-height: 1.6;
   opacity: 0.75;
+  margin-bottom: 20px;
 }
 
-input {
+/* INPUTS */
+input, select {
   width: 100%;
   padding: 12px;
   margin-bottom: 12px;
@@ -69,7 +68,8 @@ input {
   border-radius: 6px;
 }
 
-button {
+/* PRIMARY BUTTON */
+.primary-btn {
   width: 100%;
   padding: 14px;
   background: #F5D0C9;
@@ -78,10 +78,35 @@ button {
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
+  margin-bottom: 10px;
+  transition: all 0.25s ease;
 }
 
-button:hover {
+.primary-btn:hover {
   opacity: 0.9;
+}
+
+/* SECONDARY BUTTON */
+.secondary-btn {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  color: #1F3059;
+  border: 1px solid #1F3059;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.secondary-btn:hover {
+  background: #1F3059;
+  color: #F6F2EB;
+}
+
+/* SUMMARY */
+.summary {
+  display: none;
 }
 
 .summary-box {
@@ -91,13 +116,14 @@ button:hover {
   margin-bottom: 20px;
 }
 
+/* LOADING */
 .loading {
   display: none;
   text-align: center;
   font-size: 14px;
-  color: #1F3059;
   opacity: 0.7;
 }
+
 </style>
 </head>
 
@@ -106,7 +132,7 @@ button:hover {
 <div class="container">
 
 <div class="hero">
-<img src="hero.jpg" style="width:100%; border-radius:8px; margin-bottom:15px;">
+  <img src="hero.jpg">
 </div>
 
 <h1>Reserve Your Experience</h1>
@@ -117,33 +143,36 @@ An elevated dining experience inspired by fire, flavor, and craftsmanship.<br><b
 Reservations are currently hosted at our Wynwood location.
 </div>
 
+<!-- FORM -->
 <div id="formSection">
-<input id="date" type="date">
 
-<select id="time">
-  <option value="">Select time</option>
-</select>
+  <input id="date" type="date">
+
+  <select id="time">
+    <option value="">Select time</option>
+  </select>
 
   <input id="party" type="number" placeholder="Number of Guests">
 
-  <button onclick="showSummary()">Check Availability</button>
+  <button class="primary-btn" onclick="showSummary()">Check Availability</button>
 
 </div>
 
+<!-- SUMMARY -->
 <div id="summarySection" class="summary">
 
   <div class="summary-box">
     <p id="summaryDate"></p>
     <p id="summaryTime"></p>
     <p id="summaryParty"></p>
-    <p id="summaryType"></p>
   </div>
 
-  <button onclick="goToBooking()">Continue</button>
-  <button onclick="goBack()">Modify</button>
+  <button class="primary-btn" onclick="goToBooking()">Continue</button>
+  <button class="secondary-btn" onclick="goBack()">Modify</button>
 
 </div>
 
+<!-- LOADING -->
 <div id="loading" class="loading">
 Checking availability...
 </div>
@@ -152,40 +181,39 @@ Checking availability...
 
 <script>
 
-// CONFIG — adjust to your real schedule
+/* BUSINESS HOURS */
 const businessHours = {
-  0: { open: "16:00", close: "22:00" }, // Sun
-  1: { open: "16:00", close: "22:00" }, // Mon
-  2: { open: "16:00", close: "22:00" }, // Tuesday
-  3: { open: "16:00", close: "22:00" }, // Wednesday
-  4: { open: "16:00", close: "23:00" }, // Thursday
-  5: { open: "16:00", close: "23:00" }, // Friday
-  6: { open: "16:00", close: "23:00" }  // Saturday
+  0: { open: "16:00", close: "22:00" },
+  1: { open: "16:00", close: "22:00" },
+  2: { open: "16:00", close: "22:00" },
+  3: { open: "16:00", close: "22:00" },
+  4: { open: "16:00", close: "23:00" },
+  5: { open: "16:00", close: "23:00" },
+  6: { open: "16:00", close: "23:00" }
 };
 
-// Prevent past dates
+/* PREVENT PAST DATES */
 const today = new Date().toISOString().split("T")[0];
 document.getElementById("date").setAttribute("min", today);
 
-// Generate time slots
+/* GENERATE TIME SLOTS */
 document.getElementById("date").addEventListener("change", function () {
   const selectedDate = new Date(this.value);
   const day = selectedDate.getDay();
   const timeSelect = document.getElementById("time");
 
-  // Reset
   timeSelect.innerHTML = '<option value="">Select time</option>';
 
-  if (!businessHours[day]) {
-    alert("We are closed on this day.");
+  const hours = businessHours[day];
+
+  if (!hours) {
+    alert("Closed this day");
     this.value = "";
     return;
   }
 
-  const { open, close } = businessHours[day];
-
-  let current = timeToMinutes(open);
-  const end = timeToMinutes(close);
+  let current = timeToMinutes(hours.open);
+  const end = timeToMinutes(hours.close);
 
   while (current <= end) {
     const timeStr = minutesToTime(current);
@@ -196,11 +224,11 @@ document.getElementById("date").addEventListener("change", function () {
 
     timeSelect.appendChild(option);
 
-    current += 30; // 30-minute increments
+    current += 30;
   }
 });
 
-// Helpers
+/* HELPERS */
 function timeToMinutes(t) {
   const [h, m] = t.split(":").map(Number);
   return h * 60 + m;
@@ -220,19 +248,16 @@ function formatDisplayTime(t) {
   return `${hour}:${m} ${ampm}`;
 }
 
-
-
-
-
+/* DATA */
 let reservationData = {};
 
+/* VALIDATION + SUMMARY */
 function showSummary() {
 
   const date = document.getElementById("date").value;
   const time = document.getElementById("time").value;
   const party = document.getElementById("party").value;
 
-  // ✅ VALIDATION GOES HERE
   if (!date || !time || !party) {
     alert("Please complete all fields");
     return;
@@ -248,7 +273,13 @@ function showSummary() {
   document.getElementById("summarySection").style.display = "block";
 }
 
+/* BACK */
+function goBack() {
+  document.getElementById("summarySection").style.display = "none";
+  document.getElementById("formSection").style.display = "block";
+}
 
+/* BOOKING */
 function goToBooking() {
 
   const sheetURL = "https://script.google.com/macros/s/AKfycbzqVcHr4S4JDwvpGx2TMuIyvhzvv2zDrmKrZLE29nHXQb2la-LF2lEhJRs2m3wPuYD3lQ/exec";
@@ -264,10 +295,14 @@ function goToBooking() {
       party: reservationData.party,
       location: "Wynwood",
       source: "google"
-    })
+    }),
+    headers: {
+      "Content-Type": "application/json"
+    }
   });
 
   setTimeout(() => {
+
     const partySize = parseInt(reservationData.party);
 
     if (partySize > 6) {
@@ -275,8 +310,10 @@ function goToBooking() {
     } else {
       window.open("https://www.opentable.com/r/ossobuco-wynwood", "_blank");
     }
+
   }, 800);
 }
+
 </script>
 
 </body>
