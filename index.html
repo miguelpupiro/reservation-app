@@ -20,30 +20,45 @@ body {
   height: 100vh;
 }
 
-/* CONTAINER */
 .container {
   background: #141414;
-  padding: 40px;
+  padding: 30px;
   border-radius: 16px;
   width: 360px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(197,157,95,0.2);
 }
 
-/* TITLE */
+.hero img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  opacity: 0.85;
+}
+
 h1 {
   font-family: 'Playfair Display', serif;
-  font-size: 28px;
+  font-size: 26px;
   margin-bottom: 5px;
+  letter-spacing: 1px;
 }
 
 .subtitle {
-  color: #aaa;
-  font-size: 14px;
-  margin-bottom: 25px;
+  color: #c59d5f;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
 }
 
-/* INPUTS */
-input, select {
+.info {
+  color: #aaa;
+  font-size: 12px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+input {
   width: 100%;
   padding: 12px;
   margin-bottom: 12px;
@@ -54,7 +69,6 @@ input, select {
   font-size: 14px;
 }
 
-/* BUTTON */
 button {
   width: 100%;
   padding: 14px;
@@ -62,16 +76,15 @@ button {
   border: none;
   border-radius: 8px;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
-  transition: 0.3s;
+  letter-spacing: 1px;
 }
 
 button:hover {
   opacity: 0.9;
 }
 
-/* SUMMARY */
 .summary {
   display: none;
   text-align: center;
@@ -85,13 +98,14 @@ button:hover {
 }
 
 .summary-box p {
-  margin: 5px 0;
+  margin: 6px 0;
   color: #ddd;
 }
 
-.back-btn {
-  margin-top: 10px;
-  background: transparent;
+.loading {
+  display: none;
+  text-align: center;
+  font-size: 14px;
   color: #aaa;
 }
 </style>
@@ -101,21 +115,25 @@ button:hover {
 
 <div class="container">
 
-<h1>Reserve</h1>
-<div class="subtitle">An Ossobuco Experience</div>
+<div class="hero">
+<img src="https://images.unsplash.com/photo-1551218808-94e220e084d2">
+</div>
+
+<h1>Reserve Your Experience</h1>
+<div class="subtitle">Ossobuco Wynwood</div>
+
+<div class="info">
+An elevated dining experience inspired by fire, flavor, and craftsmanship.<br><br>
+Reservations are currently hosted at our Wynwood location.
+</div>
 
 <div id="formSection">
 
   <input id="date" type="date">
   <input id="time" type="time">
-  <input id="party" type="number" placeholder="Guests">
+  <input id="party" type="number" placeholder="Number of Guests">
 
-  <select id="location">
-    <option value="wynwood">Wynwood</option>
-    <option value="coconut">Coconut Grove</option>
-  </select>
-
-  <button onclick="showSummary()">Find Table</button>
+  <button onclick="showSummary()">Check Availability</button>
 
 </div>
 
@@ -125,12 +143,16 @@ button:hover {
     <p id="summaryDate"></p>
     <p id="summaryTime"></p>
     <p id="summaryParty"></p>
-    <p id="summaryLocation"></p>
+    <p id="summaryType"></p>
   </div>
 
-  <button onclick="goToOpenTable()">Continue to Booking</button>
-  <button class="back-btn" onclick="goBack()">Modify</button>
+  <button onclick="goToBooking()">Continue</button>
+  <button onclick="goBack()">Modify</button>
 
+</div>
+
+<div id="loading" class="loading">
+Checking availability...
 </div>
 
 </div>
@@ -154,6 +176,14 @@ function showSummary() {
   document.getElementById("summaryTime").innerText = time;
   document.getElementById("summaryParty").innerText = party + " Guests";
 
+  if (parseInt(party) > 6) {
+    document.getElementById("summaryType").innerText =
+      "Private Dining Experience – Wynwood";
+  } else {
+    document.getElementById("summaryType").innerText =
+      "Dining at Wynwood";
+  }
+
   document.getElementById("formSection").style.display = "none";
   document.getElementById("summarySection").style.display = "block";
 }
@@ -163,9 +193,12 @@ function goBack() {
   document.getElementById("formSection").style.display = "block";
 }
 
-function goToOpenTable() {
+function goToBooking() {
 
   const sheetURL = "https://script.google.com/macros/s/AKfycbzqVcHr4S4JDwvpGx2TMuIyvhzvv2zDrmKrZLE29nHXQb2la-LF2lEhJRs2m3wPuYD3lQ/exec";
+
+  document.getElementById("summarySection").style.display = "none";
+  document.getElementById("loading").style.display = "block";
 
   fetch(sheetURL, {
     method: "POST",
@@ -178,13 +211,15 @@ function goToOpenTable() {
     })
   });
 
-  const partySize = parseInt(reservationData.party);
+  setTimeout(() => {
+    const partySize = parseInt(reservationData.party);
 
-  if (partySize > 6) {
-    window.open("https://ossobucoholdingllc.tripleseat.com/party_request/47505", "_blank");
-  } else {
-    window.open("https://www.opentable.com/r/ossobuco-wynwood", "_blank");
-  }
+    if (partySize > 6) {
+      window.open("https://ossobucoholdingllc.tripleseat.com/party_request/47505", "_blank");
+    } else {
+      window.open("https://www.opentable.com/r/ossobuco-wynwood", "_blank");
+    }
+  }, 800);
 }
 </script>
 
