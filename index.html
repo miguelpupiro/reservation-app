@@ -1,39 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Reserve Table</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ossobuco | Reserve</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #0d0d0d;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* CONTAINER */
+.container {
+  background: #141414;
+  padding: 40px;
+  border-radius: 16px;
+  width: 360px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+/* TITLE */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #aaa;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+/* INPUTS */
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #1f1f1f;
+  border: 1px solid #333;
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #c59d5f, #e6c78b);
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* SUMMARY */
+.summary {
+  display: none;
+  text-align: center;
+}
+
+.summary-box {
+  background: #1c1c1c;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.summary-box p {
+  margin: 5px 0;
+  color: #ddd;
+}
+
+.back-btn {
+  margin-top: 10px;
+  background: transparent;
+  color: #aaa;
+}
+</style>
 </head>
 
-<body style="font-family: Arial; padding:20px; max-width:400px; margin:auto;">
+<body>
 
-<h2>Reserve Your Table</h2>
+<div class="container">
 
-<input id="date" type="date"><br><br>
-<input id="time" type="time"><br><br>
-<input id="party" type="number" placeholder="Party Size"><br><br>
+<h1>Reserve</h1>
+<div class="subtitle">An Ossobuco Experience</div>
 
-<select id="location">
-  <option value="wynwood">Wynwood</option>
-  <option value="coconut">Coconut Grove</option>
-</select><br><br>
+<div id="formSection">
 
-<button onclick="goToOpenTable()">Find Table</button>
+  <input id="date" type="date">
+  <input id="time" type="time">
+  <input id="party" type="number" placeholder="Guests">
+
+  <select id="location">
+    <option value="wynwood">Wynwood</option>
+    <option value="coconut">Coconut Grove</option>
+  </select>
+
+  <button onclick="showSummary()">Find Table</button>
+
+</div>
+
+<div id="summarySection" class="summary">
+
+  <div class="summary-box">
+    <p id="summaryDate"></p>
+    <p id="summaryTime"></p>
+    <p id="summaryParty"></p>
+    <p id="summaryLocation"></p>
+  </div>
+
+  <button onclick="goToOpenTable()">Continue to Booking</button>
+  <button class="back-btn" onclick="goBack()">Modify</button>
+
+</div>
+
+</div>
 
 <script>
-function goToOpenTable() {
+let reservationData = {};
+
+function showSummary() {
   const date = document.getElementById("date").value;
   const time = document.getElementById("time").value;
   const party = document.getElementById("party").value;
   const location = document.getElementById("location").value;
 
-  let baseUrl = location === "wynwood"
+  if (!date || !time || !party) {
+    alert("Please complete all fields");
+    return;
+  }
+
+  reservationData = { date, time, party, location };
+
+  document.getElementById("summaryDate").innerText = date;
+  document.getElementById("summaryTime").innerText = time;
+  document.getElementById("summaryParty").innerText = party + " Guests";
+  document.getElementById("summaryLocation").innerText =
+    location === "wynwood" ? "Wynwood" : "Coconut Grove";
+
+  document.getElementById("formSection").style.display = "none";
+  document.getElementById("summarySection").style.display = "block";
+}
+
+function goBack() {
+  document.getElementById("summarySection").style.display = "none";
+  document.getElementById("formSection").style.display = "block";
+}
+
+function goToOpenTable() {
+  let url = reservationData.location === "wynwood"
     ? "https://www.opentable.com/r/ossobuco-wynwood"
-    : "https://www.opentable.com/r/ossobuco-coconut-grove-miami";
+    : "https://www.opentable.com/r/ossobuco-coconut-grove";
 
-  const url = baseUrl + "?date=" + date + "&time=" + time + "&partySize=" + party;
-
-  window.location.href = url;
+  window.open(url, "_blank");
 }
 </script>
 
