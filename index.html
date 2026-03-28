@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reserve Table</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="font-family: Arial; padding:20px; max-width:400px; margin:auto;">
+
+<h2>Reserve Your Table</h2>
+
+<input id="date" type="date"><br><br>
+<input id="time" type="time"><br><br>
+<input id="party" type="number" placeholder="Party Size"><br><br>
+
+<select id="location">
+  <option value="wynwood">Wynwood</option>
+  <option value="coconut">Coconut Grove</option>
+</select><br><br>
+
+<button onclick="goToOpenTable()">Find Table</button>
+
+<script>
+function goToOpenTable() {
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("time").value;
+  const party = document.getElementById("party").value;
+  const location = document.getElementById("location").value;
+
+  let baseUrl = location === "wynwood"
+    ? "https://www.opentable.com/r/ossobuco-wynwood"
+    : "https://www.opentable.com/r/ossobuco-coconut-grove";
+
+  const url = baseUrl + "?date=" + date + "&time=" + time + "&partySize=" + party;
+
+  window.location.href = url;
+}
+</script>
+
+</body>
+</html>
