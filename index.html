@@ -118,9 +118,12 @@ Reservations are currently hosted at our Wynwood location.
 </div>
 
 <div id="formSection">
+<input id="date" type="date">
 
-  <input id="date" type="date">
-  <input id="time" type="time">
+<select id="time">
+  <option value="">Select time</option>
+</select>
+
   <input id="party" type="number" placeholder="Number of Guests">
 
   <button onclick="showSummary()">Check Availability</button>
@@ -148,13 +151,88 @@ Checking availability...
 </div>
 
 <script>
+
+// CONFIG — adjust to your real schedule
+const businessHours = {
+  0: null, // Sunday (closed example → change if needed)
+  1: null, // Monday CLOSED
+  2: { open: "16:00", close: "22:00" }, // Tuesday
+  3: { open: "16:00", close: "22:00" }, // Wednesday
+  4: { open: "16:00", close: "23:00" }, // Thursday
+  5: { open: "16:00", close: "23:00" }, // Friday
+  6: { open: "16:00", close: "23:00" }  // Saturday
+};
+
+// Prevent past dates
+const today = new Date().toISOString().split("T")[0];
+document.getElementById("date").setAttribute("min", today);
+
+// Generate time slots
+document.getElementById("date").addEventListener("change", function () {
+  const selectedDate = new Date(this.value);
+  const day = selectedDate.getDay();
+  const timeSelect = document.getElementById("time");
+
+  // Reset
+  timeSelect.innerHTML = '<option value="">Select time</option>';
+
+  if (!businessHours[day]) {
+    alert("We are closed on this day.");
+    this.value = "";
+    return;
+  }
+
+  const { open, close } = businessHours[day];
+
+  let current = timeToMinutes(open);
+  const end = timeToMinutes(close);
+
+  while (current <= end) {
+    const timeStr = minutesToTime(current);
+
+    const option = document.createElement("option");
+    option.value = timeStr;
+    option.textContent = formatDisplayTime(timeStr);
+
+    timeSelect.appendChild(option);
+
+    current += 30; // 30-minute increments
+  }
+});
+
+// Helpers
+function timeToMinutes(t) {
+  const [h, m] = t.split(":").map(Number);
+  return h * 60 + m;
+}
+
+function minutesToTime(m) {
+  const h = String(Math.floor(m / 60)).padStart(2, "0");
+  const min = String(m % 60).padStart(2, "0");
+  return `${h}:${min}`;
+}
+
+function formatDisplayTime(t) {
+  const [h, m] = t.split(":");
+  let hour = parseInt(h);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+  return `${hour}:${m} ${ampm}`;
+}
+
+
+
+
+
 let reservationData = {};
 
 function showSummary() {
+
   const date = document.getElementById("date").value;
   const time = document.getElementById("time").value;
   const party = document.getElementById("party").value;
 
+  // ✅ VALIDATION GOES HERE
   if (!date || !time || !party) {
     alert("Please complete all fields");
     return;
@@ -166,22 +244,10 @@ function showSummary() {
   document.getElementById("summaryTime").innerText = time;
   document.getElementById("summaryParty").innerText = party + " Guests";
 
-  if (parseInt(party) > 6) {
-    document.getElementById("summaryType").innerText =
-      "Private Dining Experience – Wynwood";
-  } else {
-    document.getElementById("summaryType").innerText =
-      "Dining at Wynwood";
-  }
-
   document.getElementById("formSection").style.display = "none";
   document.getElementById("summarySection").style.display = "block";
 }
 
-function goBack() {
-  document.getElementById("summarySection").style.display = "none";
-  document.getElementById("formSection").style.display = "block";
-}
 
 function goToBooking() {
 
